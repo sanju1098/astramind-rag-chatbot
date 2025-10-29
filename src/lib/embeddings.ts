@@ -1,11 +1,16 @@
 import { embed, embedMany } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google"; // ✅ add this import
+
+// Create provider instance
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
+});
 
 export async function generateEmbedding(text: string): Promise<number[]> {
   const input = text.replaceAll("\n", " ");
 
   const { embedding } = await embed({
-    model: openai.textEmbeddingModel("text-embedding-3-small"),
+    model: google.textEmbeddingModel("text-embedding-004"), // ✅ note change here
     value: input,
   });
 
@@ -13,10 +18,10 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 }
 
 export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
-  const inputs = texts.map((text) => text.replaceAll("\n", " "));
+  const inputs = texts.map((t) => t.replaceAll("\n", " "));
 
   const { embeddings } = await embedMany({
-    model: openai.textEmbeddingModel("text-embedding-3-small"),
+    model: google.textEmbeddingModel("text-embedding-004"),
     values: inputs,
   });
 

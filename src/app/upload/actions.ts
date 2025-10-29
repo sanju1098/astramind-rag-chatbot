@@ -1,47 +1,54 @@
 "use server";
 
-import * as pdf from "pdf-parse";
 import { db } from "@/lib/db-config";
-import { documents } from "@/lib/db-schema";
-import { generateEmbeddings } from "@/lib/embeddings";
+import { documents, type InsertDocument } from "@/lib/db-schema";
 import { chunkContent } from "@/lib/chunking";
+import { generateEmbeddings } from "@/lib/embeddings";
+import { extractTextFromBuffer } from "@/lib/pdf-utils";
 
 export async function processPdfFile(formData: FormData) {
   try {
     const file = formData.get("pdf") as File;
-
-    // Convert File to Buffer and extract text
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const data = await pdf(buffer);
-
-    if (!data.text || data.text.trim().length === 0) {
-      return {
-        success: false,
-        error: "No text found in PDF",
-      };
+    if (!file) {
+      return { success: false, error: "No file provided" };
     }
 
-    // Chunk the text
-    const chunks = await chunkContent(data.text);
+    // Convert File → Buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
 
-    // Generate embeddings
+    // Extract text
+    const text = await extractTextFromBuffer(buffer);
+    console.log("Extracted text length:", text.length);
+
+    if (!text.trim()) {
+      return { success: false, error: "No text found in PDF" };
+    }
+
+    // 1️⃣ Chunk the text
+    const chunks = await chunkContent(text);
+
+    // 2️⃣ Generate embeddings
     const embeddings = await generateEmbeddings(chunks);
 
-    // Store in database
-    const records = chunks.map((chunk, index) => ({
+    // 3️⃣ Prepare DB records (type-safe)
+    const records: InsertDocument[] = chunks.map((chunk, i) => ({
       content: chunk,
-      embedding: embeddings[index],
+      embedding: Array.from(embeddings[i]), // Ensure plain number[]
     }));
 
+    console.log(`📦 Prepared ${records.length} records for DB insert`);
+
+    // 4️⃣ Store in database
     await db.insert(documents).values(records);
 
     return {
       success: true,
-      message: `Created ${records.length} searchable chunks`,
+      message: `✅ Processed PDF and stored ${records.length} searchable chunks.`,
+      records,
     };
   } catch (error) {
-    console.error("PDF processing error:", error);
+    console.error("❌ PDF processing error:", error);
     return {
       success: false,
       error: "Failed to process PDF",

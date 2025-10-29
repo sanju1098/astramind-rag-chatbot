@@ -5,7 +5,7 @@ export const documents = pgTable(
   {
     id: serial("id").primaryKey(),
     content: text("content").notNull(),
-    embedding: vector("embedding", { dimensions: 1536 }), // text-embedding-3-small
+    embedding: vector("embedding", { dimensions: 768 }), // text-embedding-3-small
   },
   (table) => [
     index("embeddingIndex").using(
