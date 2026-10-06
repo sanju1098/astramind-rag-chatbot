@@ -302,7 +302,7 @@ export function PromptInputAttachment({
             </TooltipTrigger>
             <TooltipContent>
               <div className="text-muted-foreground text-xs">
-                <h4 className="max-w-[240px] overflow-hidden whitespace-normal break-words text-left font-semibold text-sm">
+                <h4 className="max-w-60 overflow-hidden whitespace-normal wrap-break-word text-left font-semibold text-sm">
                   {data.filename || "Unknown file"}
                 </h4>
                 {data.mediaType && <div>{data.mediaType}</div>}
@@ -1197,7 +1197,7 @@ export const PromptInputModelSelectTrigger = ({
   <SelectTrigger
     className={cn(
       "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
-      'hover:bg-accent hover:text-foreground [&[aria-expanded="true"]]:bg-accent [&[aria-expanded="true"]]:text-foreground',
+      'hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground',
       className
     )}
     {...props}

@@ -11,11 +11,10 @@ import { Message, MessageContent } from "@/components/ai-elements/message";
 import {
   PromptInput,
   PromptInputBody,
+  PromptInputFooter,
   type PromptInputMessage,
   PromptInputSubmit,
   PromptInputTextarea,
-  //   PromptInputToolbar,
-  PromptInputTools,
 } from "@/components/ai-elements/prompt-input";
 import { Response } from "@/components/ai-elements/response";
 import { Loader } from "@/components/ai-elements/loader";
@@ -31,11 +30,10 @@ export default function RAGChatBot() {
     sendMessage({
       text: message.text,
     });
-    setInput("");
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 relative size-full h-[calc(100vh-4rem)]">
+    <div className="max-w-4xl mx-auto p-6 relative size-full h-[calc(100vh-0.25rem)]">
       <div className="flex flex-col h-full">
         <Conversation className="h-full">
           <ConversationContent>
@@ -48,7 +46,7 @@ export default function RAGChatBot() {
                         <Fragment key={`${message.id}-${i}`}>
                           <Message from={message.role}>
                             <MessageContent>
-                              <Response>{part.text}</Response>
+              <Response>{part.text}</Response>
                             </MessageContent>
                           </Message>
                         </Fragment>
@@ -64,31 +62,21 @@ export default function RAGChatBot() {
           <ConversationScrollButton />
         </Conversation>
 
-        <PromptInput onSubmit={handleSubmit}>
-          <div className="relative flex items-center w-full mt-4">
-            <PromptInputBody className="flex-1">
-              <PromptInputTextarea
-                value={input}
+        <PromptInput onSubmit={handleSubmit} className="mt-4">
+
+          <PromptInputBody>
+            <PromptInputTextarea value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="What would you like to know?"
-                className="
-          w-full resize-none rounded-2xl border border-gray-300 dark:border-gray-700
-          bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
-          px-4 py-3 pr-12 text-base focus:outline-none focus:ring-2 focus:ring-blue-500
-          shadow-sm transition-all duration-200
-        "
-              />
-            </PromptInputBody>
-
-            <PromptInputSubmit
-              className="
-              absolute right-2 h-9 w-9 flex items-center justify-center rounded-xl
-            text-white shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
-            "
-              disabled={!input && !status}
-              status={status}
+                className="min-h-14 resize-none"
             />
-          </div>
+          </PromptInputBody>
+          <PromptInputFooter className="flex items-center justify-end">
+            <PromptInputSubmit 
+              status={status}
+              className="h-9 w-9 rounded-lg"
+            />
+          </PromptInputFooter>
         </PromptInput>
       </div>
     </div>

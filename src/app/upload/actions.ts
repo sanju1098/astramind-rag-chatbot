@@ -6,6 +6,14 @@ import { chunkContent } from "@/lib/chunking";
 import { generateEmbeddings } from "@/lib/embeddings";
 import { extractTextFromBuffer } from "@/lib/pdf-utils";
 
+function sanitizeText(text: string): string {
+  return text
+    .replace(/[\uD800-\uDFFF]/g, '')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    .replace(/\uFFFD/g, '')
+    .trim();
+}
+
 export async function processPdfFile(formData: FormData) {
   try {
     const file = formData.get("pdf") as File;
@@ -13,42 +21,36 @@ export async function processPdfFile(formData: FormData) {
       return { success: false, error: "No file provided" };
     }
 
-    // Convert File → Buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Extract text
-    const text = await extractTextFromBuffer(buffer);
+    const rawText = await extractTextFromBuffer(buffer);
+    const text = sanitizeText(rawText);
     console.log("Extracted text length:", text.length);
 
     if (!text.trim()) {
       return { success: false, error: "No text found in PDF" };
     }
 
-    // 1️⃣ Chunk the text
     const chunks = await chunkContent(text);
-
-    // 2️⃣ Generate embeddings
     const embeddings = await generateEmbeddings(chunks);
 
-    // 3️⃣ Prepare DB records (type-safe)
     const records: InsertDocument[] = chunks.map((chunk, i) => ({
-      content: chunk,
-      embedding: Array.from(embeddings[i]), // Ensure plain number[]
+      content: sanitizeText(chunk),
+      embedding: Array.from(embeddings[i]),
     }));
 
-    console.log(`📦 Prepared ${records.length} records for DB insert`);
+    console.log(`Prepared ${records.length} records for DB insert`);
 
-    // 4️⃣ Store in database
     await db.insert(documents).values(records);
 
     return {
       success: true,
-      message: `✅ Processed PDF and stored ${records.length} searchable chunks.`,
+      message: `Processed PDF and stored ${records.length} searchable chunks.`,
       records,
     };
   } catch (error) {
-    console.error("❌ PDF processing error:", error);
+    console.error("PDF processing error:", error);
     return {
       success: false,
       error: "Failed to process PDF",

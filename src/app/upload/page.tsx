@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
 
 export default function PDFUpload() {
   const [isLoading, setIsLoading] = useState(false);
@@ -73,9 +72,9 @@ export default function PDFUpload() {
 
               {isLoading && (
                 <div className="flex items-center gap-2">
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900" />
                   <span className="text-muted-foreground">
-                    Processing PDF...
+                    Processing PDF... This may take a moment for large files.
                   </span>
                 </div>
               )}
@@ -85,7 +84,7 @@ export default function PDFUpload() {
                   variant={message.type === "error" ? "destructive" : "default"}
                 >
                   <AlertTitle>
-                    {message.type === "error" ? "Error!" : "Success!"}
+                    {message.type === "error" ? "Error" : "Success"}
                   </AlertTitle>
                   <AlertDescription>{message.text}</AlertDescription>
                 </Alert>
