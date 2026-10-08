@@ -19,8 +19,8 @@ export async function extractTextFromBuffer(buffer: Buffer): Promise<string> {
     pdfParser.on("pdfParser_dataReady", (pdfData) => {
       const text = pdfData.Pages.map((page: any) =>
         page.Texts.map((t: any) =>
-          safeDecodeURIComponent(t.R.map((r: any) => r.T).join(""))
-        ).join(" ")
+          safeDecodeURIComponent(t.R.map((r: any) => r.T).join("")),
+        ).join(" "),
       ).join("\n");
 
       resolve(text);
