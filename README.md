@@ -10,6 +10,8 @@ A chat app for your PDFs. Upload a document, and AstraMind answers questions fro
 
 If no chunk passes the threshold, the model answers without document context.
 
+<img width="4731" height="6133" alt="diagram" src="https://github.com/user-attachments/assets/09ee1a54-349d-4334-8e98-d3658d5540d8" />
+
 ## Features
 
 - Streaming chat with Google Gemini through the Vercel AI SDK
