@@ -84,13 +84,7 @@ export type LoaderProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 export const Loader = ({ className, size = 16, ...props }: LoaderProps) => (
-  <div
-    className={cn(
-      "flex items-start gap-2 py-4",
-      className
-    )}
-    {...props}
-  >
+  <div className={cn("flex items-start gap-2 py-4", className)} {...props}>
     <div className="flex flex-col gap-2 overflow-hidden rounded-lg bg-secondary px-3 py-2 sm:px-4 sm:py-3 max-w-[95%] sm:max-w-[85%] lg:max-w-[80%]">
       <div className="flex items-center gap-2">
         <div className="inline-flex animate-spin items-center justify-center">
