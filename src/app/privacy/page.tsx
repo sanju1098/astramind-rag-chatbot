@@ -104,7 +104,7 @@ const sections: { title: string; body: ReactNode }[] = [
       <p>
         Questions about this policy? Open an issue on{" "}
         <a
-          href="https://github.com/sanju1098/rag-chatbot/issues"
+          href="https://github.com/sanju1098/astramind-rag-chatbot/issues"
           target="_blank"
           rel="noopener noreferrer"
           className="font-medium text-foreground underline underline-offset-4"

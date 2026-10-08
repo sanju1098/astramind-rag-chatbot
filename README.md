@@ -42,7 +42,7 @@ If no chunk passes the threshold, the model answers without document context.
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/sanju1098/rag-chatbot.git
+git clone https://github.com/sanju1098/astramind-rag-chatbot.git
 cd rag-chatbot
 npm install
 ```
@@ -109,4 +109,4 @@ Deploy to any Next.js host such as Vercel. Add the same environment variables in
 
 ## Contributing
 
-Issues and pull requests are welcome on [GitHub](https://github.com/sanju1098/rag-chatbot).
+Issues and pull requests are welcome on [GitHub](https://github.com/sanju1098/astramind-rag-chatbot).

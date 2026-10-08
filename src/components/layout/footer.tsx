@@ -9,7 +9,7 @@ const legalLinks = [
 const socials = [
   {
     name: "GitHub",
-    href: "https://github.com/sanju1098/rag-chatbot",
+    href: "https://github.com/sanju1098/astramind-rag-chatbot",
     Icon: FaGithub,
   },
   {
