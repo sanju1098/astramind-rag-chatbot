@@ -97,18 +97,5 @@ Open [http://localhost:3000](http://localhost:3000).
 | `/privacy` | Privacy Policy                         |
 | `/terms`   | Terms of Use                           |
 
-## Limitations
-
-- **No authentication.** Uploaded documents are shared by everyone using the deployment, and anyone can delete them. Do not upload confidential files.
-- **No rate limiting** on the chat route or the upload action. Add it before sharing a public link, or visitors can use up your Gemini quota.
-- **Slow large uploads.** Embeddings are sent in batches of 90 with a 61-second wait between full batches to stay under the configured API rate limit. Large PDFs can take several minutes.
-- **Text PDFs only.** Scanned pages without selectable text are not read.
-- **No source citations** are shown in chat answers yet.
-
-## Deployment
-
-Deploy to any Next.js host such as Vercel. Add the same environment variables in the host's settings and run the migrations against your Neon database first. Check your plan's function timeout, because long uploads can exceed it.
-
-## Contributing
-
+---
 Issues and pull requests are welcome on [GitHub](https://github.com/sanju1098/astramind-rag-chatbot).
